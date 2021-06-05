@@ -14,8 +14,8 @@ exports.signup = (req, res, next) => {
                 .then(() => res.status(201).json({ message: "User created!" })) // response 201 = obj created
                 .catch((error) => res.status(400).json({ error }));
         })
-        .cathc(error => res.status(500).json({error}))
-}
+        .catch(error => res.status(500).json({error}))
+};
 
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
@@ -26,14 +26,18 @@ exports.login = (req, res, next) => {
             bcrypt.compare(req.body.password, user.password)
                 .then((validation) => {
                     if (!validation) {
-                        return res.status(401).json({ message: "Mot de pass incorrect"}) // 401 non auth
+                        return res.status(401).json({ message: "Mot de pass incorrect"}); // 401 non auth
                     };
-                    res.status(200)({ // 200 OK auth
-                        iserId: user._id,
-                        token: 'TOKEN'
+                    res.status(200).json({ // 200 OK auth
+                        userId: user._id,
+                        token: jwt.sign( // distribution token
+                            { userId: user._id },
+                            'RANDOM_TOKEN_SECRET',
+                            { expiresIn: '24h' }
+                        )
                     });
                 })
-                .catch((error) => res.status(500).json({ error }));
+                .catch((error) => res.status(505).json({ error }));
         })
         .catch((error) => res.status(500).json({ error }));
-}
+};
