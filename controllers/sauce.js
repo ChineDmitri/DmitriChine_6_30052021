@@ -1,6 +1,11 @@
 const Sauce = require('../models/Sauce');
 const fs = require('fs');
 
+function deleteOneSauce(objet) {
+    const fileName = objet.imageUrl.split('/images/')[1];
+    fs.unlinkSync(`images/${fileName}`);
+}
+
 exports.getAllSauce = (req, res, next) => {
     Sauce.find()
         .then((sauces) => res.status(200).json( sauces ))
@@ -34,10 +39,8 @@ exports.modifySauce = (req, res, next) => {
     
     if (req.file) { // si on modifier une image pour une sauce, il ne faut pas oublier supprime l'ancienne
         Sauce.findOne({ _id: req.params.id})
-            .then((sauce) => {
-                const oldFileName = sauce.imageUrl.split('/images/')[1];
-                fs.unlinkSync(`images/${oldFileName}`);
-            })
+            .then((sauce) => deleteOneSauce(sauce))
+            .catch((error) => res.status(500).json({ error }));
     }
 
     Sauce.updateOne(
@@ -46,5 +49,14 @@ exports.modifySauce = (req, res, next) => {
     )
         .then(() => res.status(200).json({ message: 'Objet modify' }))
         .catch((error) => res.status(400).json({ error }));
-}
+};
 
+exports.deleteSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+        .then((sauce) => deleteOneSauce(sauce))
+        .catch((error) => res.status(500).json({ error }));
+
+    Sauce.deleteOne({ _id: req.params.id })
+        .then(() => res.status(200).json({ message: "Sauce deleted"}))
+        .catch((error) => res.status(400).json({ error }));
+}
