@@ -75,7 +75,7 @@ exports.voteSauce = (req, res, next) => {
                         })
                         .then(() => res.status(200).json({ message: 'like 0' }))
                         .catch((error) => res.status(400).json({ error }));
-                    } else if (sauce.userLiked.includes(req.body.userId)) {
+                    } else {
                         Sauce.updateOne({ _id: req.params.id }, {
                             $pull: { usersLiked: req.body.userId },
                             _id: req.params.id,
@@ -122,10 +122,11 @@ exports.voteSauce = (req, res, next) => {
                         .catch((error) => res.status(400).json({ error }));
         
                         console.log("1");
-                        console.log("lenght liked",sauce.userLiked.length);
+                        // console.log("lenght liked", sauce.usersLiked.length);
 
 
                     break;
+                    
                 default:
                     console.log("ça va pas");
             }
