@@ -98,7 +98,7 @@ exports.voteSauce = (req, res, next) => {
 
                     break;
                 case -1:
-                    if (sauce.usersDisliked.includes(req.body.userId) === false) {
+                    if (!sauce.usersDisliked.includes(req.body.userId) && !sauce.usersLiked.includes(req.body.userId)) {
                         Sauce.updateOne({ _id: req.params.id }, {
                             $push: { usersDisliked: req.body.userId },
                             _id: req.params.id,
@@ -122,7 +122,7 @@ exports.voteSauce = (req, res, next) => {
                     
                     break;
                 case 1:
-                    if (sauce.usersLiked.includes(req.body.userId) === false) {
+                    if (!sauce.usersDisliked.includes(req.body.userId) && !sauce.usersLiked.includes(req.body.userId)) {
                         Sauce.updateOne({ _id: req.params.id }, {
                             $push: { usersLiked: req.body.userId },
                             _id: req.params.id,
