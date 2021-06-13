@@ -1,13 +1,23 @@
 const User = require('../models/User');
+const crypto = require('crypto');
 
 const bcrypt = require('bcrypt'); //bcryptage
 const jwt = require('jsonwebtoken'); //attribution des tokens
 
+const SECRET_KEY = 'MOT_SECRET'; 
+
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10) // salt = 10 tours, en suite retourn un promise
         .then((hash) => { 
+
+            
+            const hashEmail = crypto.createHmac('sha256', SECRET_KEY)
+                .update(req.body.email)
+                .digest('hex');
+            console.log(hashEmail);
+
             const user = new User({ //creation d'un instance user
-                email: req.body.email,
+                email: hashEmail,
                 password: hash
             });
             user.save() // n'oublie pas souvegarger dans la DB
@@ -18,7 +28,15 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
+
+    const hashEmail = crypto.createHmac('sha256', SECRET_KEY)
+        .update(req.body.email)
+        .digest('hex');
+    console.log(hashEmail);
+
+    req.body.email = hashEmail;
+
+    User.findOne({ email: hashEmail })
         .then((user) => {
             if (!user) {
                 return res.status(401).json({ message: "Utilisateur n'est pas touvé "})
@@ -36,8 +54,9 @@ exports.login = (req, res, next) => {
                             { expiresIn: '24h' }
                         )
                     });
+                   
                 })
-                .catch((error) => res.status(505).json({ error }));
+                .catch((error) => res.status(500).json({ error }));
         })
         .catch((error) => res.status(500).json({ error }));
 };
