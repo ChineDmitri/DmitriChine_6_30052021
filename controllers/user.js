@@ -10,11 +10,9 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10) // salt = 10 tours, en suite retourn un promise
         .then((hash) => { 
 
-            
             const hashEmail = crypto.createHmac('sha256', SECRET_KEY)
                 .update(req.body.email)
                 .digest('hex');
-            console.log(hashEmail);
 
             const user = new User({ //creation d'un instance user
                 email: hashEmail,
@@ -32,7 +30,6 @@ exports.login = (req, res, next) => {
     const hashEmail = crypto.createHmac('sha256', SECRET_KEY)
         .update(req.body.email)
         .digest('hex');
-    console.log(hashEmail);
 
     req.body.email = hashEmail;
 
@@ -52,7 +49,8 @@ exports.login = (req, res, next) => {
                             { userId: user._id },
                             'RANDOM_TOKEN_SECRET',
                             { expiresIn: '24h' }
-                        )
+                        ),
+                        // email: hashEmail,
                     });
                    
                 })

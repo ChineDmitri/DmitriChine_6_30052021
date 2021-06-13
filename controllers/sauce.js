@@ -71,11 +71,10 @@ exports.voteSauce = (req, res, next) => {
                             $pull: { usersDisliked: req.body.userId },
                             _id: req.params.id,
                             dislikes: sauce.usersDisliked.length - 1
-                            
                         })
                         .then(() => res.status(200).json({ message: 'like 0' }))
                         .catch((error) => res.status(400).json({ error }));
-                    } else {
+                    } else if (sauce.usersLiked.includes(req.body.userId)) {
                         Sauce.updateOne({ _id: req.params.id }, {
                             $pull: { usersLiked: req.body.userId },
                             _id: req.params.id,
@@ -83,46 +82,68 @@ exports.voteSauce = (req, res, next) => {
                         })
                             .then(() => res.status(200).json({ message: 'like 0' }))
                             .catch((error) => res.status(400).json({ error }));
+                    } else { // si il y a aucune changement on upDate MAIS par default
+                        Sauce.updateOne({ _id: req.params.id }, {
+                            usersDisliked: sauce.usersDisliked,
+                            usersLiked: sauce.usersLiked,
+                            _id: req.params.id,
+                            dislikes: sauce.usersDisliked.length,
+                            liked: sauce.usersLiked.length
+                        })
+                            .then(() => res.status(200).json({ message: 'like 0' }))
+                            .catch((error) => res.status(400).json({ error }));
                     }
-
-
-                    // sauceObjet.userliked.splice(indexOf(req.params.user), 1)
-                    // sauceObjet.usersDisliked.splice(indexOf(req.params.user), 1)
-                    
-                    // sauceObjet.likes = sauceObjet.userliked.length;
-                    // sauceObjet.usersDisliked = sauce.usersDisliked.length;
                     console.log("0");
                     console.log("lenght disliked", sauce.usersDisliked.length);
 
                     break;
                 case -1:
+                    if (sauce.usersDisliked.includes(req.body.userId) === false) {
+                        Sauce.updateOne({ _id: req.params.id }, {
+                            $push: { usersDisliked: req.body.userId },
+                            _id: req.params.id,
+                            dislikes: sauce.usersDisliked.length + 1
+                        })
+                            .then(() => res.status(200).json({ message: 'like -1' }))
+                            .catch((error) => res.status(400).json({ error }));
+                          
+                        console.log("-1");
+                    } else { // pour evité double utilisateur dans la array usersDisliked
+                        Sauce.updateOne({ _id: req.params.id }, {
+                            usersDisliked: sauce.usersDisliked,
+                            _id: req.params.id,
+                            dislikes: sauce.usersDisliked.length
+                        })
+                            .then(() => res.status(200).json({ message: 'like -1' }))
+                            .catch((error) => res.status(400).json({ error }));
 
-                    Sauce.updateOne({ _id: req.params.id }, {
-                        $push: { usersDisliked: req.body.userId },
-                        _id: req.params.id,
-                        dislikes: sauce.usersDisliked.length + 1
-                    })
-                        .then(() => res.status(200).json({ message: 'like -1' }))
-                        .catch((error) => res.status(400).json({ error }));
-
+                        console.log("piratage");
+                    }
                     
-                    
-                    console.log("-1");
-                    console.log("lenght disliked", sauce.usersDisliked.length);
-
                     break;
                 case 1:
+                    if (sauce.usersLiked.includes(req.body.userId) === false) {
+                        Sauce.updateOne({ _id: req.params.id }, {
+                            $push: { usersLiked: req.body.userId },
+                            _id: req.params.id,
+                            likes: sauce.usersLiked.length + 1
+                        })
+                            .then(() => res.status(200).json({ message: 'like -1' }))
+                            .catch((error) => res.status(400).json({ error }));
 
-                    Sauce.updateOne({ _id: req.params.id }, {
-                        $push: { usersLiked: req.body.userId },
-                        _id: req.params.id,
-                        likes: sauce.usersLiked.length + 1
-                    })
-                        .then(() => res.status(200).json({ message: 'like -1' }))
-                        .catch((error) => res.status(400).json({ error }));
-        
                         console.log("1");
-                        // console.log("lenght liked", sauce.usersLiked.length);
+                    } else { // pour evité double utilisateur dans la array usersDisliked
+                        Sauce.updateOne({ _id: req.params.id }, {
+                            usersLiked: sauce.usersLiked,
+                            _id: req.params.id,
+                            likes: sauce.usersLiked.length
+                        })
+                            .then(() => res.status(200).json({ message: 'like -1' }))
+                            .catch((error) => res.status(400).json({ error }));
+
+                        console.log("piratage");
+                    }
+                    
 
 
                     break;
