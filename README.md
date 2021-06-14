@@ -1,12 +1,15 @@
-## Piquante
+## Pekocko
 
-Pour faire fonctionner le projet, vous devez installer :
-- [NodeJS](https://nodejs.org/en/download/) en version 12.14 ou 14.0 
-- [Angular CLI](https://github.com/angular/angular-cli) en version 7.0.2.
-- [node-sass](https://www.npmjs.com/package/node-sass) : attention à prendre la version correspondante à NodeJS. Pour Node 14.0 par exemple, installer node-sass en version 4.14+.
+Projet n6 de la formation Web Développeur chez [OpenClassRooms.com](https://openclassrooms.com/ "OpenClassRooms")
 
-Sur Windows, ces installations nécessitent d'utiliser PowerShell en tant qu'administrateur.
+## Dependencies utilisé
 
-## Development server
-
-Démarrer ng serve pour avoir accès au serveur de développement. Rendez-vous sur http://localhost:4200/. L'application va se recharger automatiquement si vous modifiez un fichier source.
+[bcrypt](https://www.npmjs.com/package/bcrypt "bcrypt")
+[body-parser](https://www.npmjs.com/package/body-parser "body-parser")
+[express](https://www.npmjs.com/package/express "express")
+[express-rate-limit](https://www.npmjs.com/package/express-rate-limit "express-rate-limit")
+[jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken "jsonwebtoken")
+[mongoose](https://www.npmjs.com/package/mongoose "mongoose")
+[mongoose-unique-validator](https://www.npmjs.com/package/mongoose-unique-validator "mongoose-unique-validator")
+[multer](https://www.npmjs.com/package/multer "multer")
+[nodemon](https://www.npmjs.com/package/nodemon "nodemon")
