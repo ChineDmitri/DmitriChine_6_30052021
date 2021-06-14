@@ -1,7 +1,6 @@
 ## Pekocko
 
 Projet n6 de la formation Web Développeur chez [OpenClassRooms.com](https://openclassrooms.com/ "OpenClassRooms")
-Back-end pour le 
 
 ## Dependencies utilisé
 
