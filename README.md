@@ -4,6 +4,8 @@ Projet n6 de la formation Web Développeur chez [OpenClassRooms.com](https://ope
 
 ## Dependencies utilisé
 
+[dotenv](https://www.npmjs.com/package/dotenv "dotenv")
+
 [bcrypt](https://www.npmjs.com/package/bcrypt "bcrypt")
 
 [body-parser](https://www.npmjs.com/package/body-parser "body-parser")
