@@ -1,10 +1,11 @@
 const User = require('../models/User');
 const crypto = require('crypto');
+const dotenv = require('dotenv').config();
 
 const bcrypt = require('bcrypt'); //bcryptage
 const jwt = require('jsonwebtoken'); //attribution des tokens
 
-const SECRET_KEY = 'MOT_SECRET'; 
+const SECRET_KEY = process.env.SHA256_KEY; 
 
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10) // salt = 10 tours, en suite retourn un promise
@@ -47,7 +48,7 @@ exports.login = (req, res, next) => {
                         userId: user._id,
                         token: jwt.sign( // distribution token
                             { userId: user._id },
-                            'RANDOM_TOKEN_SECRET',
+                            process.env.JWT_KEY,
                             { expiresIn: '24h' }
                         ),
                         // email: hashEmail,
